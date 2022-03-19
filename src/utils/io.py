@@ -60,7 +60,7 @@ def read_tel_messages(file_path: str, normalize: bool=False, stopwords_path: str
             msg_ = msg['text'][0]
         
         else:
-            pass
+            continue
 
         if normalize == True:
             msg_ = normalizer.normalize(msg_)
