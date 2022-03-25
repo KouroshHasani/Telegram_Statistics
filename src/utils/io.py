@@ -43,15 +43,7 @@ def read_tel_messages(tele_data: dict, normalize: bool=False, stopword: list=Non
     #Extract chat messages from loaded data
     data_text = []
     for msg in tele_data['messages']:
-        if isinstance(msg['text'], str):
-            msg_ = msg['text']
-        
-        elif isinstance(msg['text'][0], str):
-            msg_ = msg['text'][0]
-        
-        else:
-            continue
-
+        msg_ = get_text_from_tel_msg(msg)
         if normalize == True:
             msg_ = normalizer.normalize(msg_)
         
@@ -85,9 +77,11 @@ def get_text_from_tel_msg(tel_msg):
 
 def search_in_lines(text: str=None, text_path: str=None,search_val: list=None) -> list:
     """
+    Returns all sentences that have at least one of the search values 
     :param text: A text containig multi lines
     :param text_path: Path of a text containig multi lines
     :param search_val: If one of these values exist in setence, that sentece will be returned
+    Output: A list of string objects
     """
     sentences = []
     if text is not None:

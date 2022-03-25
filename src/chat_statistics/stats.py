@@ -141,11 +141,11 @@ class Predict_text_type:
 
 
 if __name__ == "__main__":
-    # chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
-    # chatstat.generate_word_cloud(output_dir='/mnt/g/Courses/Data_Science/02_Python/My_project/02_telegram_statistics/Telegram_Statistics/src/chat_statistics')
+    chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
+    chatstat.generate_word_cloud(output_dir='/mnt/g/Courses/Data_Science/02_Python/My_project/02_telegram_statistics/Telegram_Statistics/src/chat_statistics')
 
     # model = Predict_text_type()
     # print(model.prdicet("ببخشید چطوری میتونم پایتون رو نصب کنم؟؟"))
 
-    chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
-    print(chatstat.responder_users(5))
+    # chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
+    # print(chatstat.responder_users(5))
