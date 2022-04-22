@@ -12,13 +12,16 @@ def read_json(file_path: str) -> dict:
         return json.load(fp)
 
 
-def read_file(file_path: str) -> str:
+def read_file(file_path: str, split=None) -> str:
     """
     Reads a file and return content
     """
     # Load data
     with open(file_path) as fp:
-        return fp.read()
+        if split == None:
+            return fp.read()
+        else:
+            return fp.read().split(split)
 
 
 def remove_stopwords(text: str, stopwords: list):

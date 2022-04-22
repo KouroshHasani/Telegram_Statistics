@@ -31,7 +31,7 @@ class ChatStatistics:
         #Extract chat messages from loaded data
         logger.info("Loding data from json...")
         self.data = read_json(chat_json)
-        self.stopwords = read_file(stopword_path).split('\n')
+        self.stopwords = read_file(stopword_path, split='\n')
         self.chat_text = read_tel_messages(tele_data=self.data, normalize=normalize, stopword=self.stopwords)
         self.message_ids = {}
         for ind, msg in enumerate(self.data['messages']):
@@ -48,7 +48,7 @@ class ChatStatistics:
         param width, height and background_color: image size and color
         param font and max_font_size: font and maximum size of the font
         """
-        
+
         logger.info("Generating word cloud...")
         text = arabic_reshaper.reshape(" ".join(self.chat_text))
         wc = WordCloud(
@@ -58,7 +58,7 @@ class ChatStatistics:
             font_path=font,
             max_font_size=max_font_size
         ).generate(text)
-        
+
         wc.to_file(str(Path(output_dir) / "wordcloud.png"))
 
 
@@ -86,18 +86,18 @@ class ChatStatistics:
         for msg in self.data['messages']:
             if not 'reply_to_message_id' in msg:
                 continue
-            
+
             if not msg['reply_to_message_id'] in self.message_ids:
                 continue
-            
+
             replied_msg_id = self.message_ids[msg['reply_to_message_id']]
-            
+
             msg_ = get_text_from_tel_msg(self.data['messages'][replied_msg_id])
             if sum([i in msg_ for i in ['؟', '?']]) == 0:
                 continue
 
             users[msg['from_id']]['Name'] = f"{msg['from']}"
-            
+
             if 'Replies' in users[msg['from_id']]:
                 users[msg['from_id']]['Replies'] += [replied_msg_id]
 
@@ -108,7 +108,7 @@ class ChatStatistics:
             responders = pd.DataFrame((len(users[i]['Replies']) for i in users),
             index=(users[i]['Name'] for i in users), columns=['num_replies'])\
             .sort_values('num_replies', ascending=False)
-            
+
 
         return responders.head(number)
 
@@ -130,22 +130,22 @@ class Predict_text_type:
         list_ = [0] * len(self.feature_list)
         for ind, item in enumerate(self.feature_list):
             if item in input_:
-                list_[ind] = 1
+                list_[ind] = input_.count(item)
 
         if self.model.predict([list_])[0] == 0:
             return "Text is question"
-        
+
         else:
             return "Text is not question"
 
 
 
 if __name__ == "__main__":
-    chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
-    chatstat.generate_word_cloud(output_dir='/mnt/g/Courses/Data_Science/02_Python/My_project/02_telegram_statistics/Telegram_Statistics/src/chat_statistics')
+    # chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
+    # chatstat.generate_word_cloud(output_dir='/mnt/g/Courses/Data_Science/02_Python/My_project/02_telegram_statistics/Telegram_Statistics/src/chat_statistics')
 
-    # model = Predict_text_type()
-    # print(model.prdicet("ببخشید چطوری میتونم پایتون رو نصب کنم؟؟"))
+    model = Predict_text_type()
+    print(model.prdicet("ببخشید دوستان چطوری میتونم پایتون رو نصب کنم؟"))
 
     # chatstat = ChatStatistics(chat_json=DATA_DIR / 'cs_stack.json', normalize=False)
     # print(chatstat.responder_users(5))
